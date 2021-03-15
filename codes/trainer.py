@@ -6,6 +6,13 @@
 # LICENSE file in the root directory of this source tree.
 #
 """
+import sys
+import os
+
+PACKAGE_PARENT = '..'
+SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
+
 # Lightning trainer
 import torch
 import numpy as np
@@ -25,7 +32,6 @@ from addict import Dict
 SEED = 2334
 torch.manual_seed(SEED)
 np.random.seed(SEED)
-
 
 def optimize_on_cluster(hyperparams):
     # enable cluster training
@@ -155,7 +161,7 @@ def main(args, cluster, results_dict=None):
     #     mode='min'
     # )
 
-    if args.restore_version >= 0:
+    if True:
         logger = TestTubeLogger(
             save_dir=os.path.join(args.model_save_dir, args.id),
             version=args.restore_version,  # An existing version with a saved checkpoint
@@ -167,7 +173,7 @@ def main(args, cluster, results_dict=None):
     # ------------------------
     trainer = Trainer(
         # experiment=exp,
-        logger=logger if args.restore_version >= 0 else True,
+        logger=logger,
         default_save_path=os.path.join(args.model_save_dir, args.id),
         # checkpoint_callback=checkpoint,
         early_stop_callback=None,

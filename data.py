@@ -30,15 +30,20 @@ from utils import batchify, batch_dialogs, batch_words, batch_yhats
 import hashlib
 import pandas as pd
 
-fixed_suffixes = ["true_response", "seq2seq","backtranslate"]
-variable_suffixes = ["model_false", "rand_utt","rand_back","word_drop", "word_order","word_repeat", "corrupt_context"]
+# fixed_suffixes = ["true_response", "seq2seq","backtranslate"]
+fixed_suffixes = ["true_response"]
+# variable_suffixes = ["model_false", "rand_utt","rand_back","word_drop", "word_order","word_repeat", "corrupt_context"]
+variable_suffixes = ["rand_utt","word_drop", "word_order","word_repeat"]
 ## positive sampling scheme
-all_pos = ["true_response","backtranslate"]
+# all_pos = ["true_response","backtranslate"]
+all_pos = ["true_response"]
 ## negative sampling schemes
+# only_syntax = ["word_drop","word_order","word_repeat"]
+# only_semantics = ["model_false","rand_utt","rand_back"]
 only_syntax = ["word_drop","word_order","word_repeat"]
-only_semantics = ["model_false","rand_utt","rand_back"]
+only_semantics = ["rand_utt"]
 all_corrupt = only_syntax + only_semantics
-all_corrupt_context = only_syntax + only_semantics + ["corrupt_context"]
+all_corrupt_context = only_syntax + only_semantics
 
 
 class Data:

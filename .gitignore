@@ -126,3 +126,8 @@ dmypy.json
 # IDEA
 .idea/
 
+convai2_data/*
+full_acl_runs/*
+finnish_data/*
+bert-base-finnish-uncased-transformers-v1/*
+bert-base-finnish-uncased-v1/*
