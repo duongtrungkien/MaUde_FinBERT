@@ -284,7 +284,7 @@ def get_args(command=None):
         help="comma separated model values",
     )
     parser.add_argument(
-        "--response_file", type=str, default="~/checkpoint/dialog_metric/"
+"--response_file", type=str, default="~/Projects/online_dialog_eval/elisa_data/"
     )
     parser.add_argument(
         "--mf",

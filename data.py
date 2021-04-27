@@ -31,7 +31,7 @@ import hashlib
 import pandas as pd
 
 # fixed_suffixes = ["true_response", "seq2seq","backtranslate"]
-fixed_suffixes = ["true_response"]
+fixed_suffixes = ["true_response", "seq2seq"]
 # variable_suffixes = ["model_false", "rand_utt","rand_back","word_drop", "word_order","word_repeat", "corrupt_context"]
 variable_suffixes = ["rand_utt","word_drop", "word_order","word_repeat"]
 ## positive sampling scheme
@@ -1127,7 +1127,8 @@ class ParlAIExtractor(Data):
     def setup_args(self, parser=None):
         if parser is None:
             parser = ParlaiParser(True, True, "Display data from a task")
-        parser.add_pytorch_datateacher_args()
+        else:
+            parser.add_pytorch_datateacher_args()
         # Get command line arguments
         # parser.add_argument('-ne', '--num_examples', type=int, default=10)
         # parser.add_argument('-mdl', '--max_display_len', type=int, default=1000)
@@ -1159,9 +1160,9 @@ class ParlAIExtractor(Data):
         elif self.args.agent == "seq2seq":
             # Seq2Seq opts
             self.parlai_opts.append(
-                "-mf zoo:convai2/seq2seq/convai2_self_seq2seq_model"
+                "-mf /home/kien/Projects/ParlAI/models/opensubtitles/opensubtitles_seq2seq"
             )
-            self.parlai_opts.append("-m legacy:seq2seq:0")
+            self.parlai_opts.append("-m seq2seq")
             self.parlai_opts.append("-opt sgd")
         elif self.args.agent == "kvmemnn":
             self.parlai_opts.append("-mf zoo:convai2/kvmemnn/model")
@@ -1176,14 +1177,15 @@ class ParlAIExtractor(Data):
         if self.args.agent == "seq2seq":
             # FIX: temporary fix for parlai issue
             opt["override"] = {
-                "model": "legacy:seq2seq:0",
-                "model_file": "/private/home/koustuvs/mlp/parlai_koustuvs/data/models/convai2/seq2seq/convai2_self_seq2seq_model",
+                "model": "seq2seq",
+                "model_file": "/home/kien/Projects/ParlAI/models/opensubtitles/opensubtitles_seq2seq",
             }
         if self.args.agent == "polyencoder":
             opt["override"] = {
                 "fixed_candidates_path": "/private/home/koustuvs/mlp/parlai_koustuvs/data/models/pretrained_transformers/convai_trainset_cands.txt",
                 "ignore_bad_candidates": True,
             }
+        print(opt)
         return opt
 
     def create_agent_task(self, opt):
@@ -1220,6 +1222,7 @@ class ParlAIExtractor(Data):
         dialog_id = 0
         context_id = 0
         data_rows = []
+        count = 0
         while True:
             world.parley()
             for a in world.acts:
@@ -1263,6 +1266,9 @@ class ParlAIExtractor(Data):
                     #     context_hashes.append(cont_hash)
                     #     self.all_hashes.add(cont_hash)
                     context_id += 1
+            count += 1
+            if count >= 2000:
+                break
             # print(world.display())
             if world.episode_done():
                 if len(contexts) > 0:

@@ -12,6 +12,7 @@ build/
 develop-eggs/
 dist/
 downloads/
+elisa_data/
 eggs/
 .eggs/
 lib/
@@ -36,6 +37,7 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+log.txt
 
 # Unit test / coverage reports
 htmlcov/
